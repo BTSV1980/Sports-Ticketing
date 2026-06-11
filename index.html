@@ -10,6 +10,15 @@
 <!-- Amplitude: Guides & Surveys -->
 <script src="https://cdn.amplitude.com/script/531c4dbf18505a47dd36e327ef9cfe4b.engagement.js"></script>
 
+<!-- Amplitude init — runs inline, in documented order. SR plugin added UNCONDITIONALLY. -->
+<script>
+  // Add Session Replay defensively: a missing/slow global must never abort init().
+  try { if (window.sessionReplay && window.sessionReplay.plugin) window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 })); } catch (e) {}
+  // Guides & Surveys is non-essential — guard so a slow load can't block init.
+  try { if (window.engagement && window.engagement.plugin) window.amplitude.add(window.engagement.plugin()); } catch (e) {}
+  try { window.amplitude.init("531c4dbf18505a47dd36e327ef9cfe4b", { fetchRemoteConfig: true, autocapture: true }); } catch (e) {}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -202,13 +211,29 @@ const FIXTURES = [
 
 /* ---------------- state ---------------- */
 let state = { cat:"All", basket:null, registered:false, fanTier:"club_member", abandonGuard:false };
+
+/* Safe storage: localStorage access throws in some privacy/incognito contexts.
+   A top-level throw here would abort the entire script and kill the page, so never let it. */
+const safeStore = (function(){
+  try {
+    const t='__fcbb_test__'; localStorage.setItem(t,'1'); localStorage.removeItem(t);
+    return {
+      get:(k)=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+      set:(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} }
+    };
+  } catch(e){
+    const mem={};
+    return { get:(k)=> (k in mem ? mem[k] : null), set:(k,v)=>{ mem[k]=v; } };
+  }
+})();
+
 const VARIANT = (function(){
-  let v = localStorage.getItem('fcbb_variant');
-  if(!v){ v = Math.random()<0.5 ? 'control' : 'treatment'; localStorage.setItem('fcbb_variant', v); }
+  let v = safeStore.get('fcbb_variant');
+  if(!v){ v = Math.random()<0.5 ? 'control' : 'treatment'; safeStore.set('fcbb_variant', v); }
   return v;
 })();
-const RETURNING = localStorage.getItem('fcbb_seen') === '1';
-localStorage.setItem('fcbb_seen','1');
+const RETURNING = safeStore.get('fcbb_seen') === '1';
+safeStore.set('fcbb_seen','1');
 
 /* ---------------- amplitude bootstrap ---------------- */
 function deviceType(){ return window.innerWidth < 768 ? 'mobile' : (window.innerWidth < 1100 ? 'tablet' : 'desktop'); }
@@ -218,11 +243,7 @@ function track(name, props){ try{ amplitude.track(name, props||{}); }catch(e){ c
 
 window.addEventListener('load', function(){
   try{
-    if (window.sessionReplay) amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
-    if (window.engagement)    amplitude.add(window.engagement.plugin());
-    amplitude.init("531c4dbf18505a47dd36e327ef9cfe4b", { fetchRemoteConfig:true, autocapture:true });
-
-    // baseline guest identity
+    // SDK is already initialised inline in <head>. Just set baseline guest identity.
     const id = new amplitude.Identify();
     id.set("Fan Account Registered", false);
     id.set("Membership Level", "guest");
@@ -230,7 +251,7 @@ window.addEventListener('load', function(){
     id.set("device_type", deviceType());
     id.set("utm_medium", utmMedium());
     amplitude.identify(id);
-  }catch(e){ console.warn("Amplitude init issue", e); }
+  }catch(e){ console.warn("Amplitude identify issue", e); }
 
   renderChips(); renderFixtures();
   track("Fixtures Viewed", { is_returning_fan: RETURNING });
@@ -409,7 +430,7 @@ function completePurchase(){
   state.abandonGuard=true;
   const b=state.basket, total=b.price;
   const ref="FCBB_"+Date.now();
-  const first = localStorage.getItem('fcbb_bought')!=='1'; localStorage.setItem('fcbb_bought','1');
+  const first = safeStore.get('fcbb_bought')!=='1'; safeStore.set('fcbb_bought','1');
   track("Tickets Purchased",{ booking_reference:ref, total_paid:total, is_first_purchase:first });
   const v=document.getElementById('view-flow');
   v.innerHTML=`<div class="sheet confirm">
