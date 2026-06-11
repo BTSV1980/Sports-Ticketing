@@ -1,166 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,maximum-scale=1" />
-    <title>
-      Ampli Battleboat - My first Amplitude instrumentation project!
-    </title>
-    <meta
-      name="description"
-      content="Ampli Battleboat - My first Amplitude instrumentation project!"
-    />
-    <meta
-      name="keywords"
-      content="Amplitude, Instrumentation, AI, robot, JavaScript"
-    />
-    <meta name="google" content="notranslate" />
-    <link rel="icon" type="image/png" href="img/favicon.png" />
-    <link rel="image_src" href="img/apple-touch-icon-144x144-precomposed.png" />
-    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
-    <link
-      rel="apple-touch-icon-precomposed"
-      href="img/apple-touch-icon-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="57x57"
-      href="img/apple-touch-icon-57x57-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="72x72"
-      href="img/apple-touch-icon-72x72-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="114x114"
-      href="img/apple-touch-icon-114x114-precomposed.png"
-    />
-    <link
-      rel="apple-touch-icon-precomposed"
-      sizes="144x144"
-      href="img/apple-touch-icon-144x144-precomposed.png"
-    />
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FC Bayern Basketball — Tickets</title>
 
-    <link rel="author" href="https://plus.google.com/+BillMei" />
-    <link rel="publisher" href="https://plus.google.com/+BillMei" />
+<!-- Amplitude: Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<script src="https://cdn.amplitude.com/script/531c4dbf18505a47dd36e327ef9cfe4b.js"></script>
+<!-- Amplitude: Guides & Surveys -->
+<script src="https://cdn.amplitude.com/script/531c4dbf18505a47dd36e327ef9cfe4b.engagement.js"></script>
 
-    <link href="css/styles.css" rel="stylesheet" media="all" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#DC052D; --ink:#0E1116; --paper:#F5F3EF; --card:#FFFFFF;
+    --navy:#0B1F3A; --mut:#6B7280; --line:#E3DFD7; --ok:#147A4B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.45;}
+  .cond{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.02em;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  .hidden{display:none !important;}
 
-    <!-- Insert the Content Mode config below this line -->
+  /* header */
+  header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:50;}
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:14px 20px;}
+  .wordmark{font-family:"Saira Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:20px;letter-spacing:.04em;}
+  .wordmark b{color:var(--red);}
+  nav{display:flex;gap:18px;margin-left:8px;}
+  nav a{color:#cfd3da;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;}
+  nav a:hover{color:#fff;}
+  .spacer{flex:1;}
+  .idchip{font-size:12px;color:#cfd3da;display:flex;align-items:center;gap:8px;}
+  .idchip .dot{width:7px;height:7px;border-radius:50%;background:#888;}
+  .idchip.on .dot{background:var(--ok);}
+  .btn{background:var(--red);color:#fff;font-weight:600;padding:9px 16px;border-radius:6px;font-size:14px;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn.ghost{background:transparent;border:1px solid #3a4150;color:#fff;}
+  .btn.dark{background:var(--navy);}
+  .btn.wide{width:100%;padding:14px;font-size:15px;}
+  .btn.sm{padding:6px 12px;font-size:13px;}
 
-    <!-- Insert the GTM script for HEAD below this line -->
+  main{max-width:1080px;margin:0 auto;padding:26px 20px 80px;}
+  .eyebrow{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--red);font-weight:700;font-size:13px;}
+  h1.page{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-weight:800;font-size:34px;margin:2px 0 18px;}
 
-  </head>
-  <body>
-    <!-- Insert the GTM script for BODY below this line -->
+  /* promo banner */
+  .promo{background:linear-gradient(90deg,var(--navy),#16335c);color:#fff;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:22px;}
+  .promo b{color:#ffd0d8;}
 
-    <div class="container">
-      <h1>Ampli Battleboat - My first Amplitude instrumentation project!</h1>
-      <p class="tagline">A JavaScript AI that beats humans at battleship.</p>
+  /* controls row */
+  .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
+  .search{flex:1;min-width:220px;display:flex;gap:8px;}
+  .search input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-      <table class="identifierTable">
-        <tr>
-          <th>Amplitude Identifier</th>
-          <th>Value</th>
-        </tr>
-        <tr>
-          <td>Device Id</td>
-          <td class="myDeviceId">xxx</td>
-        </tr>
-        <tr>
-          <td>User Id</td>
-          <td class="myUserId">yyy</td>
-        </tr>
-      </table>
+  /* fixture cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
+  .card .top{background:var(--ink);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+  .comp{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#ffc2cc;}
+  .save{background:transparent;color:#fff;font-size:18px;line-height:1;opacity:.7;}
+  .save.saved{color:var(--red);opacity:1;}
+  .card .body{padding:16px;flex:1;display:flex;flex-direction:column;gap:10px;}
+  .match{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-weight:700;font-size:20px;line-height:1.05;}
+  .meta{font-size:13px;color:var(--mut);}
+  .fromprice{font-size:13px;color:var(--ink);font-weight:600;}
+  .card .foot{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
 
-      <form class="form" id="myFormId" name="my form name" action="/">
-        <label for="ftext">Enter some text</label>
-        <input type="text" id="ftext" name="ftext" />
-        <br /><br />
-        <input type="submit" />
-      </form>
-      <br />
-      <a
-        id="UTM_example"
-        href="/?utm_source=newsletter&utm_campaign=product_analytics_playbook&utm_medium=email&utm_term=product%20analytics&utm_content=banner-link"
-        >Link with UTM Parameters</a
-      >
-      <br /><br />
+  /* detail */
+  .detail{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .detail .hero{background:var(--ink);color:#fff;padding:26px;}
+  .detail .hero .comp{margin-bottom:6px;}
+  .detail .hero .match{font-size:30px;}
+  .detail .inner{padding:22px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;}
+  @media(max-width:760px){.detail .inner{grid-template-columns:1fr;}}
+  .tiers{display:flex;flex-direction:column;gap:10px;}
+  .tier{border:1px solid var(--line);border-radius:9px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;}
+  .tier:hover{border-color:var(--red);}
+  .tier.sel{border-color:var(--red);box-shadow:0 0 0 2px rgba(220,5,45,.15);}
+  .tier .name{font-weight:600;}
+  .tier .sub{font-size:12px;color:var(--mut);}
+  .tier .price{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:22px;}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;height:fit-content;}
+  .panel h3{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:16px;margin-bottom:12px;}
+  .rowline{display:flex;justify-content:space-between;font-size:14px;margin:6px 0;}
+  .rowline.total{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;font-weight:700;}
+  .link{color:var(--red);font-size:13px;font-weight:600;background:none;text-decoration:underline;}
 
-      <p>How to play</p>
-      <ol class="instructions">
-        <li id="step1">Select your ships from the left-hand side</li>
-        <li id="step2">Place your ships on your map</li>
-        <li id="step3">
-          Click on the cells of the enemy's map<br />
-          to find and destroy all five enemy ships
-        </li>
-        <li id="step4">
-          The computer will fire on your ships<br />
-          immediately after you fire on its ships.
-        </li>
-      </ol>
-      <div class="game-container">
-        <div id="restart-sidebar" class="hidden">
-          <h2>Try Again</h2>
-          <button id="restart-game">Restart Game</button>
-        </div>
-        <div id="roster-sidebar">
-          <h2>Place Your Ships</h2>
-          <ul class="fleet-roster">
-            <li id="patrolboat">Patrol Boat</li>
-            <li id="submarine">Submarine</li>
-            <li id="destroyer">Destroyer</li>
-            <li id="battleship">Battleship</li>
-            <li id="carrier">Aircraft Carrier</li>
-          </ul>
-          <button id="rotate-button" data-direction="0">Rotate Ship</button>
-          <button id="start-game" class="hidden">Start Game</button>
-          <button id="place-randomly" class="hidden">
-            Place Randomly and Start
-          </button>
-        </div>
-        <div id="stats-sidebar">
-          <h2>Stats</h2>
-          <p><strong>Games Won</strong></p>
-          <p id="stats-wins">0 of 0</p>
-          <p><strong>Accuracy</strong></p>
-          <p id="stats-accuracy">0%</p>
-          <button id="reset-stats">Reset Stats</button>
-          <button id="prob-heatmap" class="hidden">
-            Show Probability Heatmap
-          </button>
-        </div>
-        <div class="grid-container">
-          <h2>Your Fleet</h2>
-          <div class="grid human-player">
-            <span class="no-js"
-              >Please enable JavaScript to play this game</span
-            >
-          </div>
-        </div>
-        <div class="grid-container">
-          <h2>Enemy Fleet</h2>
-          <div class="grid computer-player">
-            <span class="no-js"
-              >Please enable JavaScript to play this game</span
-            >
-          </div>
-        </div>
-      </div>
+  /* wall / checkout */
+  .sheet{max-width:520px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;}
+  .sheet h2{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:24px;margin-bottom:6px;}
+  .sheet p.sub{color:var(--mut);font-size:14px;margin-bottom:18px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
+  .field input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px;}
+  .or{text-align:center;color:var(--mut);font-size:12px;margin:14px 0;text-transform:uppercase;letter-spacing:.1em;}
+  .preview{font-size:12px;color:var(--mut);margin-top:6px;}
+  .preview b{color:var(--ink);font-family:monospace;}
+  .confirm{text-align:center;padding:30px;}
+  .confirm .tick{width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .ref{font-family:monospace;background:var(--paper);padding:4px 8px;border-radius:5px;}
 
-      <p>Created by <a href="https://billmei.net">Bill Mei</a>.</p>
-      <p>
-        This project is open source
-        <a href="https://github.com/billmei/battleboat">on GitHub</a>.
-      </p>
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;width:100%;}
+  .modal h3{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:20px;margin-bottom:4px;}
+  .seg{display:flex;gap:8px;margin:10px 0 4px;}
+  .seg button{flex:1;padding:9px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:13px;font-weight:600;}
+  .seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .x{background:none;color:var(--mut);font-size:20px;float:right;line-height:1;}
+  footer{border-top:1px solid var(--line);color:var(--mut);font-size:12px;text-align:center;padding:24px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <span class="wordmark">FC Bayern <b>Basketball</b></span>
+    <nav>
+      <a onclick="go('fixtures')">Fixtures</a>
+      <a onclick="go('fixtures')">Tickets</a>
+      <a onclick="openMembership()">Membership</a>
+    </nav>
+    <span class="spacer"></span>
+    <span class="idchip" id="idchip"><span class="dot"></span><span id="idlabel">Browsing as guest</span></span>
+    <button class="btn sm" id="loginBtn" onclick="openLogin()">Sign in</button>
+  </div>
+</header>
+
+<main>
+  <!-- FIXTURES -->
+  <section id="view-fixtures">
+    <div class="eyebrow">SAP Garden · München</div>
+    <h1 class="page">Upcoming Home Games</h1>
+
+    <div class="promo" id="promoBanner">
+      <div style="font-size:26px">🎟️</div>
+      <div>Become a <b>member</b> and unlock presale access &amp; 10% off every ticket.
+        <button class="link" style="color:#ffd0d8" onclick="openMembership()">See membership →</button></div>
     </div>
 
-    <script src="js/battleboat_gtm.js"></script>
-    <span class="prefetch" id="prefetch1"></span>
-    <span class="prefetch" id="prefetch2"></span>
-    <span class="prefetch" id="prefetch3"></span>
-  </body>
+    <div class="controls">
+      <div class="search">
+        <input id="searchInput" placeholder="Search opponents, competitions…" onkeydown="if(event.key==='Enter')runSearch()">
+        <button class="btn" onclick="runSearch()">Search</button>
+      </div>
+    </div>
+    <div class="chips" id="catChips" style="margin-bottom:18px"></div>
+
+    <div class="grid" id="fixtureGrid"></div>
+  </section>
+
+  <!-- DETAIL -->
+  <section id="view-detail" class="hidden"></section>
+
+  <!-- BASKET / WALL / CHECKOUT / CONFIRM -->
+  <section id="view-flow" class="hidden"></section>
+</main>
+
+<footer>
+  Demo experience for analytics illustration · not an official FC Bayern sales channel.
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="overlay hidden" id="loginModal">
+  <div class="modal">
+    <button class="x" onclick="closeLogin()">×</button>
+    <h3>Sign in to FCBB Tickets</h3>
+    <p style="font-size:13px;color:var(--mut);margin-bottom:12px">Save your seats and sync across devices.</p>
+    <div class="field"><label>Name</label><input id="liName" oninput="previewId()" placeholder="Alex Fan"></div>
+    <div class="field"><label>Demo number</label><input id="liNum" type="number" value="1" oninput="previewId()"></div>
+    <div class="field">
+      <label>Fan type</label>
+      <div class="seg" id="fanSeg">
+        <button class="on" data-tier="club_member" onclick="setFan(this,'club_member')">Member</button>
+        <button data-tier="season_member" onclick="setFan(this,'season_member')">Season ticket</button>
+      </div>
+    </div>
+    <p class="preview">Your Amplitude ID: <b id="idPreview">alex_1_…</b></p>
+    <div style="margin-top:16px"><button class="btn wide" onclick="doLogin()">Sign in &amp; continue</button></div>
+  </div>
+</div>
+
+<script>
+/* ---------------- data ---------------- */
+const CATS = ["EuroLeague","Bundesliga (BBL)","Cup","Courtside/Premium","Family Block"];
+const PRICE = {"EuroLeague":59,"Bundesliga (BBL)":39,"Cup":45,"Courtside/Premium":149,"Family Block":25};
+const FIXTURES = [
+  {id:"GAME_001",comp:"EuroLeague",opp:"Real Madrid",date:"Fri 20 Jun · 20:30"},
+  {id:"GAME_002",comp:"Bundesliga (BBL)",opp:"ALBA Berlin",date:"Sun 22 Jun · 15:00"},
+  {id:"GAME_003",comp:"EuroLeague",opp:"Olympiacos",date:"Thu 26 Jun · 20:00"},
+  {id:"GAME_004",comp:"Cup",opp:"ratiopharm Ulm",date:"Wed 02 Jul · 19:00"},
+  {id:"GAME_005",comp:"Bundesliga (BBL)",opp:"Bamberg Baskets",date:"Sat 05 Jul · 18:30"},
+  {id:"GAME_006",comp:"Courtside/Premium",opp:"Fenerbahçe (Courtside)",date:"Tue 08 Jul · 20:30"},
+];
+
+/* ---------------- state ---------------- */
+let state = { cat:"All", basket:null, registered:false, fanTier:"club_member", abandonGuard:false };
+const VARIANT = (function(){
+  let v = localStorage.getItem('fcbb_variant');
+  if(!v){ v = Math.random()<0.5 ? 'control' : 'treatment'; localStorage.setItem('fcbb_variant', v); }
+  return v;
+})();
+const RETURNING = localStorage.getItem('fcbb_seen') === '1';
+localStorage.setItem('fcbb_seen','1');
+
+/* ---------------- amplitude bootstrap ---------------- */
+function deviceType(){ return window.innerWidth < 768 ? 'mobile' : (window.innerWidth < 1100 ? 'tablet' : 'desktop'); }
+function utmMedium(){ return new URLSearchParams(location.search).get('utm_medium') || 'direct'; }
+
+function track(name, props){ try{ amplitude.track(name, props||{}); }catch(e){ console.warn('amp not ready', name); } }
+
+window.addEventListener('load', function(){
+  try{
+    if (window.sessionReplay) amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+    if (window.engagement)    amplitude.add(window.engagement.plugin());
+    amplitude.init("531c4dbf18505a47dd36e327ef9cfe4b", { fetchRemoteConfig:true, autocapture:true });
+
+    // baseline guest identity
+    const id = new amplitude.Identify();
+    id.set("Fan Account Registered", false);
+    id.set("Membership Level", "guest");
+    id.set("account_age_days", 0);
+    id.set("device_type", deviceType());
+    id.set("utm_medium", utmMedium());
+    amplitude.identify(id);
+  }catch(e){ console.warn("Amplitude init issue", e); }
+
+  renderChips(); renderFixtures();
+  track("Fixtures Viewed", { is_returning_fan: RETURNING });
+});
+
+// session_ended + Basket Abandoned on leave
+window.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){
+    if(state.basket && !state.abandonGuard){ track("Basket Abandoned", { game_id: state.basket.id, basket_total: state.basket.price }); }
+    track("session_ended", {});
+  }
+});
+
+/* ---------------- navigation ---------------- */
+function show(id){ ["fixtures","detail","flow"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden", v!==id)); window.scrollTo(0,0); }
+function go(v){ if(v==='fixtures'){ show('fixtures'); } }
+
+/* ---------------- fixtures view ---------------- */
+function renderChips(){
+  const box = document.getElementById('catChips');
+  box.innerHTML = '';
+  ["All",...CATS].forEach(c=>{
+    const b=document.createElement('button');
+    b.className='chip'+(state.cat===c?' active':'');
+    b.textContent=c;
+    b.onclick=()=>{ state.cat=c; renderChips(); renderFixtures();
+      if(c!=="All"){ const shown=FIXTURES.filter(f=>f.comp===c).length; track("Ticket Category Browsed",{ section_name:c, games_shown:shown }); } };
+    box.appendChild(b);
+  });
+}
+function renderFixtures(){
+  const grid=document.getElementById('fixtureGrid'); grid.innerHTML='';
+  const list = state.cat==="All" ? FIXTURES : FIXTURES.filter(f=>f.comp===state.cat);
+  list.forEach((f,i)=>{
+    const price = PRICE[f.comp] || 39;
+    const card=document.createElement('div'); card.className='card';
+    card.innerHTML = `
+      <div class="top">
+        <div><div class="comp">${f.comp}</div><div style="font-size:12px;color:#aab;margin-top:3px">${f.date}</div></div>
+        <button class="save" title="Save game" data-id="${f.id}">♥</button>
+      </div>
+      <div class="body">
+        <div class="match">FC Bayern<br>vs ${f.opp}</div>
+        <div class="meta">SAP Garden · München</div>
+        <div class="fromprice">From €${price.toFixed(2)}</div>
+        ${i===0?'<div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.05em">★ Recommended for you</div>':''}
+      </div>
+      <div class="foot">
+        <span class="meta">Limited availability</span>
+        <button class="btn sm" data-go="${f.id}" data-rec="${i===0}">Get tickets</button>
+      </div>`;
+    card.querySelector('.save').onclick=(e)=>{ e.stopPropagation(); e.currentTarget.classList.toggle('saved'); track("Game Saved",{ game_id:f.id }); };
+    card.querySelector('[data-go]').onclick=()=>{ if(i===0) track("Recommended Game Clicked",{ game_id:f.id }); openDetail(f); };
+    grid.appendChild(card);
+  });
+}
+function runSearch(){
+  const q=document.getElementById('searchInput').value.trim();
+  if(!q) return;
+  const res=FIXTURES.filter(f=>(f.opp+f.comp).toLowerCase().includes(q.toLowerCase()));
+  track("Fixtures Searched",{ search_query:q, results_returned:res.length });
+  state.cat="All"; renderChips();
+  const grid=document.getElementById('fixtureGrid');
+  if(res.length){ renderFixtures(); }
+  else grid.innerHTML='<p class="meta">No games match “'+q+'”. Showing all games.</p>';
+}
+
+/* ---------------- detail view ---------------- */
+function openMembership(){ track("Membership Offer Viewed",{ offer_type:"member_discount", offer_pct:0.10 }); alert("FCBB Membership — presale access and 10% off every ticket. (Demo)"); }
+
+let curGame=null, curTier=null;
+function openDetail(f){
+  curGame=f; curTier=null;
+  const base=PRICE[f.comp]||39;
+  track("Game Detail Viewed",{ game_id:f.id, ticket_category:f.comp, ticket_price:base });
+  const tiers = [
+    {cat:"Family Block", sub:"Behind the basket · great for families"},
+    {cat:"Bundesliga (BBL)", sub:"Lower tier sideline"},
+    {cat:"EuroLeague", sub:"Premium sideline, centre court"},
+    {cat:"Courtside/Premium", sub:"Courtside · hospitality included"},
+  ];
+  const v=document.getElementById('view-detail');
+  v.innerHTML=`
+    <button class="link" style="margin-bottom:14px" onclick="show('fixtures')">← All games</button>
+    <div class="detail">
+      <div class="hero"><div class="comp">${f.comp} · ${f.date}</div><div class="match">FC Bayern vs ${f.opp}</div>
+        <div style="margin-top:8px"><button class="link" style="color:#ffd0d8" onclick="track('Matchday Info Read',{game_id:'${f.id}'})">Read matchday info →</button></div>
+      </div>
+      <div class="inner">
+        <div>
+          <h3 class="cond" style="font-size:18px;margin-bottom:10px">Choose your seats</h3>
+          <div class="tiers" id="tierBox"></div>
+        </div>
+        <div class="panel">
+          <h3>Your selection</h3>
+          <div id="selBox"><p class="meta">Pick a seating category to continue.</p></div>
+        </div>
+      </div>
+    </div>`;
+  const tb=v.querySelector('#tierBox');
+  tiers.forEach(t=>{
+    const price=PRICE[t.cat];
+    const el=document.createElement('div'); el.className='tier';
+    el.innerHTML=`<div><div class="name">${t.cat}</div><div class="sub">${t.sub}</div></div><div class="price">€${price.toFixed(2)}</div>`;
+    el.onclick=()=>selectTier(t.cat, price, el);
+    tb.appendChild(el);
+  });
+  show('detail');
+}
+function selectTier(cat, price, el){
+  curTier={cat,price};
+  document.querySelectorAll('#tierBox .tier').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  state.basket={ id:curGame.id, comp:curGame.comp, opp:curGame.opp, cat, price };
+  track("Seats Added to Basket",{ game_id:curGame.id, ticket_category:cat, ticket_price:price, basket_total:price });
+  document.getElementById('selBox').innerHTML=`
+    <div class="rowline"><span>${cat}</span><span>€${price.toFixed(2)}</span></div>
+    <div class="rowline"><span>FC Bayern vs ${curGame.opp}</span><span></span></div>
+    <div class="rowline total"><span>Total</span><span>€${price.toFixed(2)}</span></div>
+    <div style="margin-top:14px"><button class="btn wide" onclick="proceed()">Proceed to checkout</button></div>`;
+}
+
+/* ---------------- proceed → wall (guests) or checkout (registered) ---------------- */
+function proceed(){
+  if(state.registered){ startCheckout(); return; }
+  // guest hits the login wall
+  const b=state.basket, fee=0.0, tax=0.0, total=b.price+fee+tax;
+  track("Fan Login Wall Hit",{ basket_total:b.price, booking_fee:fee, tax:tax, total_paid:total, fee_waived:false });
+  track("$exposure",{ flag_key:"fan-login-wall-hit-reduction", variant:VARIANT });
+  renderWall();
+}
+function renderWall(){
+  const b=state.basket;
+  const guestBtn = `<button class="btn wide dark" onclick="continueGuest()">Continue as guest</button>`;
+  const v=document.getElementById('view-flow');
+  v.innerHTML=`
+    <button class="link" style="margin-bottom:14px" onclick="backToDetail()">← Back to seats</button>
+    <div class="sheet">
+      <h2>Sign in to continue</h2>
+      <p class="sub">You're booking ${b.cat} for FC Bayern vs ${b.opp} (€${b.price.toFixed(2)}).</p>
+      <button class="btn wide" onclick="openLogin(true)">Log in or create a fan account</button>
+      ${ VARIANT==='treatment' ? '<div class="or">— or —</div>'+guestBtn : '' }
+      <div class="or" style="margin-top:18px">Have a promo code?</div>
+      <div class="field"><input id="promoInput" placeholder="Enter promo code"></div>
+      <button class="btn ghost sm" style="color:var(--ink);border-color:var(--line)" onclick="applyPromo()">Apply code</button>
+    </div>`;
+  show('flow');
+}
+function backToDetail(){ if(state.basket){ track("Basket Abandoned",{ game_id:state.basket.id, basket_total:state.basket.price }); } openDetail(curGame); }
+function applyPromo(){
+  const code=(document.getElementById('promoInput').value||'').trim();
+  const ok = code.toUpperCase()==='FCBB10';
+  track("Promo Code Entered",{ offer_attempted:true, offer_applied:ok, saving_amount: ok ? +(state.basket.price*0.10).toFixed(2) : 0 });
+  alert(ok ? "Code applied — 10% off!" : "Code not recognised. Try FCBB10.");
+}
+function continueGuest(){ startCheckout(); }
+
+/* ---------------- checkout + confirm ---------------- */
+function startCheckout(){
+  const b=state.basket, total=b.price;
+  track("Checkout Started",{ basket_total:b.price, total_paid:total });
+  const v=document.getElementById('view-flow');
+  v.innerHTML=`
+    <button class="link" style="margin-bottom:14px" onclick="renderWall()">← Back</button>
+    <div class="sheet">
+      <h2>Checkout</h2>
+      <p class="sub">FC Bayern vs ${b.opp} · ${b.cat}</p>
+      <div class="field"><label>Email for tickets</label><input id="coEmail" placeholder="you@email.com"></div>
+      <div class="field"><label>Card number</label><input placeholder="4242 4242 4242 4242"></div>
+      <div class="rowline total"><span>Total</span><span>€${total.toFixed(2)}</span></div>
+      <div style="margin-top:16px"><button class="btn wide" onclick="completePurchase()">Pay €${total.toFixed(2)}</button></div>
+    </div>`;
+  show('flow');
+}
+function completePurchase(){
+  state.abandonGuard=true;
+  const b=state.basket, total=b.price;
+  const ref="FCBB_"+Date.now();
+  const first = localStorage.getItem('fcbb_bought')!=='1'; localStorage.setItem('fcbb_bought','1');
+  track("Tickets Purchased",{ booking_reference:ref, total_paid:total, is_first_purchase:first });
+  const v=document.getElementById('view-flow');
+  v.innerHTML=`<div class="sheet confirm">
+      <div class="tick">✓</div>
+      <h2>You're going!</h2>
+      <p class="sub">FC Bayern vs ${b.opp} · ${b.cat}</p>
+      <p style="margin:10px 0">Booking reference <span class="ref">${ref}</span></p>
+      <button class="btn" onclick="resetFlow()">Back to fixtures</button>
+    </div>`;
+  show('flow');
+}
+function resetFlow(){ state.basket=null; state.abandonGuard=false; show('fixtures'); }
+
+/* ---------------- identity / login ---------------- */
+function openLogin(fromWall){ document.getElementById('loginModal').classList.remove('hidden'); previewId(); document.getElementById('loginModal').dataset.fromwall=fromWall?'1':''; }
+function closeLogin(){ document.getElementById('loginModal').classList.add('hidden'); }
+function setFan(btn,tier){ document.querySelectorAll('#fanSeg button').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); state.fanTier=tier; }
+function genId(name,num){ const c=(name||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'')||'user'; const d=new Date().toISOString().split('T')[0].replace(/-/g,''); return `${c}_${num||1}_${d}`; }
+function previewId(){ const n=document.getElementById('liName').value, num=document.getElementById('liNum').value||1; document.getElementById('idPreview').textContent=genId(n,num); }
+function doLogin(){
+  const n=document.getElementById('liName').value||'Fan', num=document.getElementById('liNum').value||1;
+  const uid=genId(n,num);
+  try{
+    amplitude.setUserId(uid);
+    const id=new amplitude.Identify();
+    id.set("Fan Account Registered", true);
+    id.set("Membership Level", state.fanTier);
+    id.set("account_age_days", state.fanTier==='season_member'?420:160);
+    id.set("device_type", deviceType());
+    id.set("utm_medium", utmMedium());
+    amplitude.identify(id);
+  }catch(e){ console.warn(e); }
+  state.registered=true;
+  const chip=document.getElementById('idchip'); chip.classList.add('on');
+  document.getElementById('idlabel').textContent=uid;
+  document.getElementById('loginBtn').textContent='Account';
+  const fromWall=document.getElementById('loginModal').dataset.fromwall==='1';
+  closeLogin();
+  if(fromWall && state.basket){ startCheckout(); }
+}
+</script>
+</body>
 </html>
