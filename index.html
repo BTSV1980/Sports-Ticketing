@@ -3,40 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FC Bayern Basketball — Tickets</title>
+<title>Upcoming Home Games — FC Bayern Basketball Tickets</title>
 
-<!-- Amplitude: Analytics + Session Replay + Web Experiment (unified smart loader) -->
+<!-- Amplitude: Analytics + Session Replay + Web Experiment (unified loader) -->
 <script src="https://cdn.amplitude.com/script/531c4dbf18505a47dd36e327ef9cfe4b.js"></script>
 <!-- Amplitude: Guides & Surveys -->
 <script src="https://cdn.amplitude.com/script/531c4dbf18505a47dd36e327ef9cfe4b.engagement.js"></script>
-
-<!-- Amplitude init — runs inline, in documented order. SR plugin added UNCONDITIONALLY. -->
 <script>
-  // Add Session Replay defensively: a missing/slow global must never abort init().
+  // Order matters: plugins first, then init. Each step guarded so a slow CDN never blocks the page.
   try { if (window.sessionReplay && window.sessionReplay.plugin) window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 })); } catch (e) {}
-  // Guides & Surveys is non-essential — guard so a slow load can't block init.
   try { if (window.engagement && window.engagement.plugin) window.amplitude.add(window.engagement.plugin()); } catch (e) {}
-  try { window.amplitude.init("531c4dbf18505a47dd36e327ef9cfe4b", { fetchRemoteConfig: true, autocapture: true }); } catch (e) {}
+  try {
+    window.amplitude.init("531c4dbf18505a47dd36e327ef9cfe4b", {
+      fetchRemoteConfig: true,
+      autocapture: {
+        attribution: true,
+        sessions: true,
+        formInteractions: true,
+        fileDownloads: true,
+        // One Page Viewed per screen: every route change below uses history.pushState with its own #/hash,
+        // so Heatmaps, Zoning and G&S page targeting can tell Fixtures, Game, Login Wall and Checkout apart.
+        pageViews: { trackHistoryChanges: "all" },
+        // Zoning Insights needs click + exposure events ([Amplitude] Viewport Content Updated).
+        elementInteractions: { viewportContentUpdated: true },
+        frustrationInteractions: true,   // rage + dead clicks
+        webVitals: true
+      }
+    });
+  } catch (e) {}
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --red:#DC052D; --ink:#0E1116; --paper:#F5F3EF; --card:#FFFFFF;
-    --navy:#0B1F3A; --mut:#6B7280; --line:#E3DFD7; --ok:#147A4B;
-  }
+  :root{ --red:#DC052D; --ink:#0E1116; --paper:#F5F3EF; --card:#FFFFFF; --navy:#0B1F3A; --mut:#6B7280; --line:#E3DFD7; --ok:#147A4B; --warn:#B45309; }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:Inter,system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.45;}
   .cond{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.02em;}
   button{font-family:inherit;cursor:pointer;border:none;}
   .hidden{display:none !important;}
-
-  /* header */
   header{background:var(--ink);color:#fff;position:sticky;top:0;z-index:50;}
-  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:14px 20px;}
-  .wordmark{font-family:"Saira Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:20px;letter-spacing:.04em;}
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:14px 20px;flex-wrap:wrap;}
+  .wordmark{font-family:"Saira Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:20px;letter-spacing:.04em;cursor:pointer;}
   .wordmark b{color:var(--red);}
   nav{display:flex;gap:18px;margin-left:8px;}
   nav a{color:#cfd3da;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;}
@@ -47,28 +56,22 @@
   .idchip.on .dot{background:var(--ok);}
   .btn{background:var(--red);color:#fff;font-weight:600;padding:9px 16px;border-radius:6px;font-size:14px;}
   .btn:hover{filter:brightness(1.08);}
-  .btn.ghost{background:transparent;border:1px solid #3a4150;color:#fff;}
+  .btn[disabled]{opacity:.6;cursor:wait;}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);}
   .btn.dark{background:var(--navy);}
   .btn.wide{width:100%;padding:14px;font-size:15px;}
   .btn.sm{padding:6px 12px;font-size:13px;}
-
   main{max-width:1080px;margin:0 auto;padding:26px 20px 80px;}
   .eyebrow{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--red);font-weight:700;font-size:13px;}
   h1.page{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-weight:800;font-size:34px;margin:2px 0 18px;}
-
-  /* promo banner */
   .promo{background:linear-gradient(90deg,var(--navy),#16335c);color:#fff;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:22px;}
   .promo b{color:#ffd0d8;}
-
-  /* controls row */
   .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
   .search{flex:1;min-width:220px;display:flex;gap:8px;}
   .search input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px;}
   .chips{display:flex;gap:8px;flex-wrap:wrap;}
   .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;}
   .chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
-
-  /* fixture cards */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;}
   .card .top{background:var(--ink);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
@@ -80,28 +83,29 @@
   .meta{font-size:13px;color:var(--mut);}
   .fromprice{font-size:13px;color:var(--ink);font-weight:600;}
   .card .foot{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
-
-  /* detail */
+  .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .badge.red{color:var(--red);} .badge.warn{color:var(--warn);}
   .detail{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
   .detail .hero{background:var(--ink);color:#fff;padding:26px;}
-  .detail .hero .comp{margin-bottom:6px;}
   .detail .hero .match{font-size:30px;}
   .detail .inner{padding:22px;display:grid;grid-template-columns:1.3fr 1fr;gap:24px;}
   @media(max-width:760px){.detail .inner{grid-template-columns:1fr;}}
   .tiers{display:flex;flex-direction:column;gap:10px;}
-  .tier{border:1px solid var(--line);border-radius:9px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;}
+  .tier{border:1px solid var(--line);border-radius:9px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;background:#fff;text-align:left;width:100%;}
   .tier:hover{border-color:var(--red);}
   .tier.sel{border-color:var(--red);box-shadow:0 0 0 2px rgba(220,5,45,.15);}
+  .tier.out{opacity:.45;cursor:not-allowed;}
   .tier .name{font-weight:600;}
   .tier .sub{font-size:12px;color:var(--mut);}
-  .tier .price{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:22px;}
+  .tier .price{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:22px;text-align:right;}
+  .tier .price small{display:block;font-family:Inter;font-size:10px;font-weight:500;color:var(--mut);text-transform:none;}
+  .qty{display:flex;align-items:center;gap:10px;margin:10px 0;}
+  .qty button{width:30px;height:30px;border-radius:6px;background:#fff;border:1px solid var(--line);font-size:16px;}
   .panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;height:fit-content;}
   .panel h3{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:16px;margin-bottom:12px;}
   .rowline{display:flex;justify-content:space-between;font-size:14px;margin:6px 0;}
   .rowline.total{border-top:1px solid var(--line);margin-top:10px;padding-top:10px;font-weight:700;}
   .link{color:var(--red);font-size:13px;font-weight:600;background:none;text-decoration:underline;}
-
-  /* wall / checkout */
   .sheet{max-width:520px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;}
   .sheet h2{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:24px;margin-bottom:6px;}
   .sheet p.sub{color:var(--mut);font-size:14px;margin-bottom:18px;}
@@ -109,13 +113,15 @@
   .field label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;}
   .field input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px;}
   .or{text-align:center;color:var(--mut);font-size:12px;margin:14px 0;text-transform:uppercase;letter-spacing:.1em;}
+  .pm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+  .pm button{padding:11px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:13px;font-weight:600;}
+  .pm button.on{border-color:var(--ink);box-shadow:0 0 0 2px rgba(14,17,22,.12);}
+  .err{background:#FEF2F2;color:#991B1B;border:1px solid #FECACA;border-radius:8px;padding:10px 12px;font-size:13px;margin:12px 0;}
   .preview{font-size:12px;color:var(--mut);margin-top:6px;}
   .preview b{color:var(--ink);font-family:monospace;}
   .confirm{text-align:center;padding:30px;}
   .confirm .tick{width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
   .ref{font-family:monospace;background:var(--paper);padding:4px 8px;border-radius:5px;}
-
-  /* modal */
   .overlay{position:fixed;inset:0;background:rgba(8,10,14,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
   .modal{background:#fff;border-radius:12px;padding:24px;max-width:420px;width:100%;}
   .modal h3{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;font-size:20px;margin-bottom:4px;}
@@ -123,6 +129,9 @@
   .seg button{flex:1;padding:9px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:13px;font-weight:600;}
   .seg button.on{background:var(--ink);color:#fff;border-color:var(--ink);}
   .x{background:none;color:var(--mut);font-size:20px;float:right;line-height:1;}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:8px;font-size:14px;z-index:200;max-width:90vw;}
+  .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:8px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
   footer{border-top:1px solid var(--line);color:var(--mut);font-size:12px;text-align:center;padding:24px;}
 </style>
 </head>
@@ -130,346 +139,445 @@
 
 <header>
   <div class="bar">
-    <span class="wordmark">FC Bayern <b>Basketball</b></span>
+    <span class="wordmark" onclick="nav('/fixtures')">FC Bayern <b>Basketball</b></span>
     <nav>
-      <a onclick="go('fixtures')">Fixtures</a>
-      <a onclick="go('fixtures')">Tickets</a>
-      <a onclick="openMembership()">Membership</a>
+      <a id="nav-fixtures" onclick="nav('/fixtures')">Fixtures</a>
+      <a id="nav-tickets" onclick="nav('/fixtures')">Tickets</a>
+      <a id="nav-membership" onclick="openMembership('nav')">Membership</a>
     </nav>
     <span class="spacer"></span>
     <span class="idchip" id="idchip"><span class="dot"></span><span id="idlabel">Browsing as guest</span></span>
-    <button class="btn sm" id="loginBtn" onclick="openLogin()">Sign in</button>
+    <button class="btn sm" id="loginBtn" onclick="openLogin('header')">Sign in</button>
   </div>
 </header>
 
 <main>
-  <!-- FIXTURES -->
+  <!-- FIXTURES  (#/fixtures) -->
   <section id="view-fixtures">
     <div class="eyebrow">SAP Garden · München</div>
     <h1 class="page">Upcoming Home Games</h1>
-
-    <div class="promo" id="promoBanner">
+    <div class="promo" id="promoBanner" data-zone="membership-banner">
       <div style="font-size:26px">🎟️</div>
       <div>Become a <b>member</b> and unlock presale access &amp; 10% off every ticket.
-        <button class="link" style="color:#ffd0d8" onclick="openMembership()">See membership →</button></div>
+        <button class="link" id="promoBannerCta" style="color:#ffd0d8" onclick="openMembership('banner')">See membership →</button></div>
     </div>
-
-    <div class="controls">
+    <div class="controls" data-zone="search">
       <div class="search">
         <input id="searchInput" placeholder="Search opponents, competitions…" onkeydown="if(event.key==='Enter')runSearch()">
-        <button class="btn" onclick="runSearch()">Search</button>
+        <button class="btn" id="searchBtn" onclick="runSearch()">Search</button>
       </div>
     </div>
-    <div class="chips" id="catChips" style="margin-bottom:18px"></div>
-
-    <div class="grid" id="fixtureGrid"></div>
+    <div class="chips" id="catChips" data-zone="competition-filter" style="margin-bottom:18px"></div>
+    <div class="grid" id="fixtureGrid" data-zone="fixture-grid"></div>
   </section>
 
-  <!-- DETAIL -->
+  <!-- GAME DETAIL  (#/game/GAME_xxx) -->
   <section id="view-detail" class="hidden"></section>
 
-  <!-- BASKET / WALL / CHECKOUT / CONFIRM -->
+  <!-- LOGIN WALL / CHECKOUT / CONFIRMATION  (#/login-wall, #/checkout, #/confirmation) -->
   <section id="view-flow" class="hidden"></section>
 </main>
 
-<footer>
-  Demo experience for analytics illustration · not an official FC Bayern sales channel.
-</footer>
+<footer>Demo experience for analytics illustration · not an official FC Bayern sales channel.</footer>
 
 <!-- LOGIN MODAL -->
 <div class="overlay hidden" id="loginModal">
   <div class="modal">
     <button class="x" onclick="closeLogin()">×</button>
-    <h3>Sign in to FCBB Tickets</h3>
+    <h3 id="loginTitle">Sign in to FCBB Tickets</h3>
     <p style="font-size:13px;color:var(--mut);margin-bottom:12px">Save your seats and sync across devices.</p>
     <div class="field"><label>Name</label><input id="liName" oninput="previewId()" placeholder="Alex Fan"></div>
     <div class="field"><label>Demo number</label><input id="liNum" type="number" value="1" oninput="previewId()"></div>
     <div class="field">
       <label>Fan type</label>
       <div class="seg" id="fanSeg">
+        <button data-tier="registered" onclick="setFan(this,'registered')">New account</button>
         <button class="on" data-tier="club_member" onclick="setFan(this,'club_member')">Member</button>
         <button data-tier="season_member" onclick="setFan(this,'season_member')">Season ticket</button>
       </div>
     </div>
     <p class="preview">Your Amplitude ID: <b id="idPreview">alex_1_…</b></p>
-    <div style="margin-top:16px"><button class="btn wide" onclick="doLogin()">Sign in &amp; continue</button></div>
+    <div style="margin-top:16px"><button class="btn wide" id="loginSubmit" onclick="doLogin()">Sign in &amp; continue</button></div>
   </div>
 </div>
 
+<!-- MEMBERSHIP MODAL (replaces the old blocking alert) -->
+<div class="overlay hidden" id="memberModal">
+  <div class="modal">
+    <button class="x" onclick="closeMembership()">×</button>
+    <h3>FCBB Club Membership</h3>
+    <p style="font-size:14px;color:var(--mut);margin:8px 0 14px">Presale access for EuroLeague games, 10% off every ticket and no login wall at checkout.</p>
+    <div class="rowline total"><span>Club Member · season 2026/27</span><span>€60.00</span></div>
+    <div style="margin-top:16px"><button class="btn wide" id="joinMemberBtn" onclick="joinMembership()">Join for €60</button></div>
+    <div style="margin-top:8px"><button class="btn wide ghost" onclick="closeMembership()">Maybe later</button></div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
 <script>
-/* ---------------- data ---------------- */
-const CATS = ["EuroLeague","Bundesliga (BBL)","Cup","Courtside/Premium","Family Block"];
-const PRICE = {"EuroLeague":59,"Bundesliga (BBL)":39,"Cup":45,"Courtside/Premium":149,"Family Block":25};
-const FIXTURES = [
-  {id:"GAME_001",comp:"EuroLeague",opp:"Real Madrid",date:"Fri 20 Jun · 20:30"},
-  {id:"GAME_002",comp:"Bundesliga (BBL)",opp:"ALBA Berlin",date:"Sun 22 Jun · 15:00"},
-  {id:"GAME_003",comp:"EuroLeague",opp:"Olympiacos",date:"Thu 26 Jun · 20:00"},
-  {id:"GAME_004",comp:"Cup",opp:"ratiopharm Ulm",date:"Wed 02 Jul · 19:00"},
-  {id:"GAME_005",comp:"Bundesliga (BBL)",opp:"Bamberg Baskets",date:"Sat 05 Jul · 18:30"},
-  {id:"GAME_006",comp:"Courtside/Premium",opp:"Fenerbahçe (Courtside)",date:"Tue 08 Jul · 20:30"},
+/* ===================== data (kept in sync with the synthetic dataset) ===================== */
+const TIERS = [
+  {cat:"Family Block", base:25, sub:"Behind the basket · great for families"},
+  {cat:"Upper Tier", base:35, sub:"Upper ring · full court view"},
+  {cat:"Lower Tier Sideline", base:59, sub:"Lower ring sideline, centre court"},
+  {cat:"Courtside/Premium", base:149, sub:"Courtside · hospitality included"},
 ];
+const COMP_MULT = {"Cup":0.8, "Bundesliga (BBL)":1.0, "EuroLeague":1.35};
+const FEE_PER_TICKET = 2.5, SERVICE_PCT = 0.08;
+const FIXTURES = [
+  {id:"GAME_117",comp:"EuroLeague",opp:"Partizan Belgrade",date:"2026-11-06T20:30"},
+  {id:"GAME_108",comp:"Bundesliga (BBL)",opp:"Rostock Seawolves",date:"2026-11-08T18:30"},
+  {id:"GAME_118",comp:"EuroLeague",opp:"Real Madrid",date:"2026-11-13T20:30",soldOut:true},
+  {id:"GAME_109",comp:"Bundesliga (BBL)",opp:"Telekom Baskets Bonn",date:"2026-11-22T15:00"},
+  {id:"GAME_119",comp:"EuroLeague",opp:"Anadolu Efes",date:"2026-11-27T20:30"},
+  {id:"GAME_120",comp:"EuroLeague",opp:"Žalgiris Kaunas",date:"2026-12-04T20:30"},
+  {id:"GAME_110",comp:"Bundesliga (BBL)",opp:"EWE Baskets Oldenburg",date:"2026-12-06T15:00"},
+  {id:"GAME_121",comp:"EuroLeague",opp:"Virtus Bologna",date:"2026-12-11T20:30"},
+  {id:"GAME_111",comp:"Bundesliga (BBL)",opp:"ratiopharm Ulm",date:"2026-12-20T15:00"},
+  {id:"GAME_123",comp:"Cup",opp:"MHP Riesen Ludwigsburg",date:"2027-01-09T18:00"},
+  {id:"GAME_122",comp:"EuroLeague",opp:"Olympiacos",date:"2027-01-15T20:30"},
+  {id:"GAME_112",comp:"Bundesliga (BBL)",opp:"ALBA Berlin",date:"2027-01-24T15:00"},
+];
+const COMPS = ["EuroLeague","Bundesliga (BBL)","Cup"];
+const VALID_PROMO = "FCBB10";
+const SURVEY_HINT = "G&S: Exit survey triggers on 'Basket Abandoned'; NPS on 'Tickets Purchased'; members guide on 'Seats Added to Basket'.";
 
-/* ---------------- state ---------------- */
-let state = { cat:"All", basket:null, registered:false, fanTier:"club_member", abandonGuard:false };
+function price(f, tierBase){ return +(tierBase * (COMP_MULT[f.comp]||1) * (f.id==="GAME_118"?1.6:1)).toFixed(2); }
+function feesFor(base, qty){ return +(qty*FEE_PER_TICKET + base*SERVICE_PCT).toFixed(2); }
+function fmtDate(iso){ const d=new Date(iso); return d.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'})+' · '+d.toTimeString().slice(0,5); }
+function daysUntil(iso){ return Math.max(0, Math.round((new Date(iso)-new Date())/86400000)); }
+function upcoming(){ const now=new Date(); const l=FIXTURES.filter(f=>new Date(f.date)>now); return l.length?l:FIXTURES; }
 
-/* Safe storage: localStorage access throws in some privacy/incognito contexts.
-   A top-level throw here would abort the entire script and kill the page, so never let it. */
+/* ===================== state & storage ===================== */
 const safeStore = (function(){
-  try {
-    const t='__fcbb_test__'; localStorage.setItem(t,'1'); localStorage.removeItem(t);
-    return {
-      get:(k)=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } },
-      set:(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} }
-    };
-  } catch(e){
-    const mem={};
-    return { get:(k)=> (k in mem ? mem[k] : null), set:(k,v)=>{ mem[k]=v; } };
-  }
+  try { const t='__fcbb_test__'; localStorage.setItem(t,'1'); localStorage.removeItem(t);
+    return { get:k=>{try{return localStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}} };
+  } catch(e){ const m={}; return { get:k=>(k in m?m[k]:null), set:(k,v)=>{m[k]=v;} }; }
 })();
+// Local 50/50 split for the guest-checkout test. Flag key matches the experiment in Amplitude (fan-login-wall-hit-reduction).
+// ?fcbb_variant=control|treatment pins the variant (used by the Session Replay demo bots).
+const VARIANT = (function(){ const forced=new URLSearchParams(location.search).get('fcbb_variant'); if(forced==='control'||forced==='treatment'){ safeStore.set('fcbb_variant',forced); return forced; }
+  let v=safeStore.get('fcbb_variant'); if(!v){ v=Math.random()<0.5?'control':'treatment'; safeStore.set('fcbb_variant',v);} return v; })();
+const RETURNING = safeStore.get('fcbb_seen')==='1'; safeStore.set('fcbb_seen','1');
+let state = { comp:"All", game:null, tier:null, qty:2, basket:null, registered:false, membership:"guest", fanTier:"club_member",
+              deepest:1, converted:false, abandonGuard:false, checkoutType:"account", pm:null, attempts:0, discount:0 };
 
-const VARIANT = (function(){
-  let v = safeStore.get('fcbb_variant');
-  if(!v){ v = Math.random()<0.5 ? 'control' : 'treatment'; safeStore.set('fcbb_variant', v); }
-  return v;
-})();
-const RETURNING = safeStore.get('fcbb_seen') === '1';
-safeStore.set('fcbb_seen','1');
-
-/* ---------------- amplitude bootstrap ---------------- */
+/* ===================== amplitude helpers ===================== */
 function deviceType(){ return window.innerWidth < 768 ? 'mobile' : (window.innerWidth < 1100 ? 'tablet' : 'desktop'); }
-function utmMedium(){ return new URLSearchParams(location.search).get('utm_medium') || 'direct'; }
-
-function track(name, props){ try{ amplitude.track(name, props||{}); }catch(e){ console.warn('amp not ready', name); } }
-
-window.addEventListener('load', function(){
-  try{
-    // SDK is already initialised inline in <head>. Just set baseline guest identity.
-    const id = new amplitude.Identify();
-    id.set("Fan Account Registered", false);
-    id.set("Membership Level", "guest");
-    id.set("account_age_days", 0);
-    id.set("device_type", deviceType());
-    id.set("utm_medium", utmMedium());
+function isIOS(){ return new URLSearchParams(location.search).get('sim')==='ios' || /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }
+function isAndroid(){ return /Android/.test(navigator.userAgent); }
+function qp(k){ return new URLSearchParams(location.search).get(k); }
+function utmMedium(){ return qp('utm_medium') || (document.referrer ? 'organic search' : 'direct'); }
+function track(name, props, opts){ try{ amplitude.track(name, props||{}, opts||undefined); }catch(e){ console.warn('amp not ready', name); } }
+function identifyBase(){
+  try{ const id=new amplitude.Identify();
+    id.set("Fan Account Registered", state.registered); id.set("Membership Level", state.membership);
+    id.set("device_type", deviceType()); id.set("utm_medium", utmMedium());
+    id.set("Preferred Language", (navigator.language||'en').slice(0,2));
+    id.setOnce("account_age_days", 0);
     amplitude.identify(id);
-  }catch(e){ console.warn("Amplitude identify issue", e); }
+  }catch(e){}
+}
+function toast(msg, ms){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.remove('hidden'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.add('hidden'), ms||2600); }
 
-  renderChips(); renderFixtures();
-  track("Fixtures Viewed", { is_returning_fan: RETURNING });
+/* ===================== router (hash routes = distinct Page URLs) ===================== */
+const TITLES = { fixtures:"Upcoming Home Games", game:"Game Detail", "login-wall":"Sign in to continue", checkout:"Checkout", confirmation:"Booking confirmed" };
+function nav(path, replace){
+  const route = path.split('/')[1] || 'fixtures';
+  document.title = (TITLES[route]||'Tickets') + " — FC Bayern Basketball Tickets";   // set BEFORE pushState so Page Viewed gets the right title
+  const url = location.pathname + location.search + '#' + path;
+  if(!replace) leaveCheck(path);
+  if(replace) history.replaceState({path}, '', url); else history.pushState({path}, '', url);
+  render(path);
+}
+window.addEventListener('popstate', ()=>{ const p=(location.hash||'#/fixtures').slice(1); leaveCheck(p); render(p); });
+function show(id){ ["fixtures","detail","flow"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden", v!==id)); window.scrollTo(0,0); }
+function render(path){
+  state.cur = path;
+  const parts = path.split('/').filter(Boolean);
+  const r = parts[0]||'fixtures';
+  if(r==='game'){ const f=FIXTURES.find(x=>x.id===parts[1]) || upcoming()[0]; renderDetail(f); }
+  else if(r==='login-wall' && state.basket){ renderWall(); }
+  else if(r==='checkout' && state.basket){ renderCheckout(); }
+  else if(r==='confirmation' && state.lastBooking){ renderConfirmation(); }
+  else { show('fixtures'); renderChips(); renderFixtures(); }
+}
+// Leaving the flow with seats in the basket (back button / logo) = Basket Abandoned
+function leaveCheck(nextPath){
+  if(state.basket && !state.abandonGuard && !/^\/(login-wall|checkout|confirmation)/.test(nextPath)){
+    const prev = state.cur || '';
+    const trig = prev.includes('login-wall') ? 'login_wall' : (prev.includes('checkout') ? (state.attempts? 'payment_error':'checkout_form') : 'other');
+    abandon(trig);
+  }
+}
+function abandon(trigger){
+  if(!state.basket) return;
+  track("Basket Abandoned", { game_id:state.basket.id, basket_total:state.basket.total, abandonment_trigger:trigger, deepest_funnel_step_reached:state.deepest });
+  state.basket=null; state._wallFired=false;
+}
+
+/* ===================== boot ===================== */
+window.addEventListener('load', function(){
+  identifyBase();
+  const start=(location.hash||'#/fixtures').slice(1);
+  document.title = (TITLES[start.split('/')[1]]||TITLES.fixtures) + " — FC Bayern Basketball Tickets";
+  track("Fixtures Viewed", { referrer_source: utmMedium(), is_returning_fan: RETURNING, fixtures_shown: upcoming().length, page_language:(navigator.language||'en').slice(0,2) });
+  render(start.startsWith('/game')?start:'/fixtures');
+  if(!start.startsWith('/game')) history.replaceState({path:'/fixtures'}, '', location.pathname+location.search+'#/fixtures');
 });
-
-// session_ended + Basket Abandoned on leave
 window.addEventListener('visibilitychange', function(){
-  if(document.visibilityState === 'hidden'){
-    if(state.basket && !state.abandonGuard){ track("Basket Abandoned", { game_id: state.basket.id, basket_total: state.basket.price }); }
-    track("session_ended", {});
+  if(document.visibilityState==='hidden'){
+    if(state.basket && !state.abandonGuard){ const p=state.cur||''; abandon(p.includes('login-wall')?'login_wall':(p.includes('checkout')?(state.attempts?'payment_error':'checkout_form'):'other')); }
+    track("session_ended", { deepest_funnel_step_reached: state.deepest, converted: state.converted });
   }
 });
 
-/* ---------------- navigation ---------------- */
-function show(id){ ["fixtures","detail","flow"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden", v!==id)); window.scrollTo(0,0); }
-function go(v){ if(v==='fixtures'){ show('fixtures'); } }
-
-/* ---------------- fixtures view ---------------- */
+/* ===================== fixtures ===================== */
 function renderChips(){
-  const box = document.getElementById('catChips');
-  box.innerHTML = '';
-  ["All",...CATS].forEach(c=>{
-    const b=document.createElement('button');
-    b.className='chip'+(state.cat===c?' active':'');
-    b.textContent=c;
-    b.onclick=()=>{ state.cat=c; renderChips(); renderFixtures();
-      if(c!=="All"){ const shown=FIXTURES.filter(f=>f.comp===c).length; track("Ticket Category Browsed",{ section_name:c, games_shown:shown }); } };
+  const box=document.getElementById('catChips'); box.innerHTML='';
+  ["All",...COMPS].forEach(c=>{
+    const b=document.createElement('button'); b.className='chip'+(state.comp===c?' active':''); b.textContent=c;
+    b.id='chip-'+c.toLowerCase().replace(/[^a-z]+/g,'-');
+    b.onclick=()=>{ state.comp=c; renderChips(); renderFixtures();
+      if(c!=="All") track("Ticket Category Browsed",{ section_name:c, games_shown: upcoming().filter(f=>f.comp===c).length, filter_used:true }); };
     box.appendChild(b);
   });
 }
-function renderFixtures(){
+function renderFixtures(list){
   const grid=document.getElementById('fixtureGrid'); grid.innerHTML='';
-  const list = state.cat==="All" ? FIXTURES : FIXTURES.filter(f=>f.comp===state.cat);
+  list = list || (state.comp==="All" ? upcoming() : upcoming().filter(f=>f.comp===state.comp));
   list.forEach((f,i)=>{
-    const price = PRICE[f.comp] || 39;
-    const card=document.createElement('div'); card.className='card';
-    card.innerHTML = `
-      <div class="top">
-        <div><div class="comp">${f.comp}</div><div style="font-size:12px;color:#aab;margin-top:3px">${f.date}</div></div>
-        <button class="save" title="Save game" data-id="${f.id}">♥</button>
-      </div>
+    const p0 = price(f, TIERS[0].base), from = p0 + FEE_PER_TICKET + p0*SERVICE_PCT;
+    const card=document.createElement('div'); card.className='card'; card.id='card-'+f.id;
+    card.innerHTML=`
+      <div class="top"><div><div class="comp">${f.comp}</div><div style="font-size:12px;color:#aab;margin-top:3px">${fmtDate(f.date)}</div></div>
+        <button class="save" title="Save game">♥</button></div>
       <div class="body">
         <div class="match">FC Bayern<br>vs ${f.opp}</div>
         <div class="meta">SAP Garden · München</div>
-        <div class="fromprice">From €${price.toFixed(2)}</div>
-        ${i===0?'<div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.05em">★ Recommended for you</div>':''}
+        <div class="fromprice">${f.soldOut?'Sold out':'From €'+from.toFixed(2)+' <span class="meta">incl. fees</span>'}</div>
+        ${i===0&&!f.soldOut?'<div class="badge red">★ Recommended for you</div>':''}
+        ${f.soldOut?'<div class="badge warn">Waitlist open</div>':''}
       </div>
-      <div class="foot">
-        <span class="meta">Limited availability</span>
-        <button class="btn sm" data-go="${f.id}" data-rec="${i===0}">Get tickets</button>
-      </div>`;
-    card.querySelector('.save').onclick=(e)=>{ e.stopPropagation(); e.currentTarget.classList.toggle('saved'); track("Game Saved",{ game_id:f.id }); };
-    card.querySelector('[data-go]').onclick=()=>{ if(i===0) track("Recommended Game Clicked",{ game_id:f.id }); openDetail(f); };
+      <div class="foot"><span class="meta">${f.soldOut?'High demand':'Limited availability'}</span>
+        <button class="btn sm" id="getTickets-${f.id}">${f.soldOut?'Join waitlist':'Get tickets'}</button></div>`;
+    card.querySelector('.save').onclick=(e)=>{ e.stopPropagation(); e.currentTarget.classList.toggle('saved'); track("Game Saved",{ game_id:f.id, competition:f.comp }); };
+    card.querySelector('.foot .btn').onclick=()=>{
+      if(i===0) track("Recommended Game Clicked",{ game_id:f.id, competition:f.comp, opponent:f.opp, recommendation_context:"personalised", position_in_list:1 });
+      nav('/game/'+f.id);
+    };
     grid.appendChild(card);
   });
 }
 function runSearch(){
-  const q=document.getElementById('searchInput').value.trim();
-  if(!q) return;
-  const res=FIXTURES.filter(f=>(f.opp+f.comp).toLowerCase().includes(q.toLowerCase()));
-  track("Fixtures Searched",{ search_query:q, results_returned:res.length });
-  state.cat="All"; renderChips();
-  const grid=document.getElementById('fixtureGrid');
-  if(res.length){ renderFixtures(); }
-  else grid.innerHTML='<p class="meta">No games match “'+q+'”. Showing all games.</p>';
+  const q=document.getElementById('searchInput').value.trim(); if(!q) return;
+  const res=upcoming().filter(f=>(f.opp+' '+f.comp).toLowerCase().includes(q.toLowerCase()));
+  track("Fixtures Searched",{ search_query:q.toLowerCase(), results_returned:res.length, zero_results:res.length===0, search_language:/[äöüß]|karte|ermäßigt|heim/i.test(q)?'de':'en' });
+  state.comp="All"; renderChips();
+  if(res.length) renderFixtures(res);
+  else document.getElementById('fixtureGrid').innerHTML='<p class="meta" id="noResults">No games match “'+q.replace(/</g,'&lt;')+'”. Looking for FC Bayern football? This shop only sells basketball tickets.</p>';
 }
 
-/* ---------------- detail view ---------------- */
-function openMembership(){ track("Membership Offer Viewed",{ offer_type:"member_discount", offer_pct:0.10 }); alert("FCBB Membership — presale access and 10% off every ticket. (Demo)"); }
+/* ===================== membership (modal, no alert) ===================== */
+function openMembership(source){ track("Membership Offer Viewed",{ offer_type: source==='banner'?'banner':(source==='guide'?'guide':'nav'), offer_pct:0.10 }); document.getElementById('memberModal').classList.remove('hidden'); }
+function closeMembership(){ document.getElementById('memberModal').classList.add('hidden'); }
+function joinMembership(){
+  if(!state.registered){ state._afterLogin='membership'; closeMembership(); openLogin('membership'); return; }
+  state.membership='club_member';
+  track("Membership Purchased",{ plan:"Club Member", price:60, source:"modal", currency:"EUR" }, { revenue:60, price:60, quantity:1, productId:"MEMBERSHIP_CLUB", revenueType:"membership" });
+  identifyBase(); closeMembership(); toast("Welcome to the Club! 10% off is now applied.");
+}
 
-let curGame=null, curTier=null;
-function openDetail(f){
-  curGame=f; curTier=null;
-  const base=PRICE[f.comp]||39;
-  track("Game Detail Viewed",{ game_id:f.id, ticket_category:f.comp, ticket_price:base });
-  const tiers = [
-    {cat:"Family Block", sub:"Behind the basket · great for families"},
-    {cat:"Bundesliga (BBL)", sub:"Lower tier sideline"},
-    {cat:"EuroLeague", sub:"Premium sideline, centre court"},
-    {cat:"Courtside/Premium", sub:"Courtside · hospitality included"},
-  ];
+/* ===================== game detail ===================== */
+function renderDetail(f){
+  state.game=f; state.tier=null;
+  const low=price(f,TIERS[0].base);
+  track("Game Detail Viewed",{ game_id:f.id, competition:f.comp, opponent:f.opp, game_date:f.date.slice(0,10), days_until_game:daysUntil(f.date),
+                               ticket_price:low, availability:f.soldOut?'sold_out':(f.id==='GAME_118'?'low_stock':'in_stock'), price_display:'all_in' });
   const v=document.getElementById('view-detail');
   v.innerHTML=`
-    <button class="link" style="margin-bottom:14px" onclick="show('fixtures')">← All games</button>
+    <button class="link" id="backToGames" style="margin-bottom:14px" onclick="nav('/fixtures')">← All games</button>
     <div class="detail">
-      <div class="hero"><div class="comp">${f.comp} · ${f.date}</div><div class="match">FC Bayern vs ${f.opp}</div>
-        <div style="margin-top:8px"><button class="link" style="color:#ffd0d8" onclick="track('Matchday Info Read',{game_id:'${f.id}'})">Read matchday info →</button></div>
-      </div>
+      <div class="hero"><div class="comp">${f.comp} · ${fmtDate(f.date)}</div><div class="match">FC Bayern vs ${f.opp}</div>
+        <div style="margin-top:8px"><button class="link" id="matchdayInfo" style="color:#ffd0d8" onclick="matchday()">Read matchday info →</button></div></div>
       <div class="inner">
-        <div>
-          <h3 class="cond" style="font-size:18px;margin-bottom:10px">Choose your seats</h3>
-          <div class="tiers" id="tierBox"></div>
+        <div data-zone="seat-tiers">
+          <h3 class="cond" style="font-size:18px;margin-bottom:10px">${f.soldOut?'This game is sold out':'Choose your seats'}</h3>
+          ${f.soldOut?`<p class="meta" style="margin-bottom:12px">Join the waitlist and we'll email you if seats are released.</p>
+            <button class="btn" id="waitlistBtn" onclick="waitlist()">Join waitlist</button>`:'<div class="tiers" id="tierBox"></div>'}
         </div>
-        <div class="panel">
+        <div class="panel" id="selectionPanel" data-zone="selection-panel">
           <h3>Your selection</h3>
-          <div id="selBox"><p class="meta">Pick a seating category to continue.</p></div>
+          <div id="selBox"><p class="meta">Pick a seating category to continue. All prices include booking &amp; service fees.</p></div>
         </div>
       </div>
     </div>`;
-  const tb=v.querySelector('#tierBox');
-  tiers.forEach(t=>{
-    const price=PRICE[t.cat];
-    const el=document.createElement('div'); el.className='tier';
-    el.innerHTML=`<div><div class="name">${t.cat}</div><div class="sub">${t.sub}</div></div><div class="price">€${price.toFixed(2)}</div>`;
-    el.onclick=()=>selectTier(t.cat, price, el);
-    tb.appendChild(el);
-  });
+  if(!f.soldOut){
+    const tb=v.querySelector('#tierBox');
+    TIERS.forEach(t=>{
+      const p=price(f,t.base), allIn=+(p+FEE_PER_TICKET+p*SERVICE_PCT).toFixed(2);
+      const el=document.createElement('button'); el.className='tier'; el.id='tier-'+t.cat.toLowerCase().replace(/[^a-z]+/g,'-');
+      el.innerHTML=`<div><div class="name">${t.cat}</div><div class="sub">${t.sub}</div></div><div class="price">€${allIn.toFixed(2)}<small>per ticket incl. fees</small></div>`;
+      el.onclick=()=>selectTier(t.cat, p, el);
+      tb.appendChild(el);
+    });
+  }
   show('detail');
 }
-function selectTier(cat, price, el){
-  curTier={cat,price};
-  document.querySelectorAll('#tierBox .tier').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel');
-  state.basket={ id:curGame.id, comp:curGame.comp, opp:curGame.opp, cat, price };
-  track("Seats Added to Basket",{ game_id:curGame.id, ticket_category:cat, ticket_price:price, basket_total:price });
+function matchday(){ track('Matchday Info Read',{ game_id:state.game.id, section:'arrival' }); toast("Doors open 90 min before tip-off · U6 Olympiazentrum · cashless arena"); }
+function waitlist(){ track("Waitlist Joined",{ game_id:state.game.id, opponent:state.game.opp, competition:state.game.comp }); toast("You're on the waitlist — we'll email you."); }
+function selectTier(cat, p, el){
+  state.tier={cat,p};
+  document.querySelectorAll('#tierBox .tier').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+  if(cat==='Family Block' && state.qty<3) state.qty=3;
+  updateBasket(true);
+}
+function changeQty(d){ state.qty=Math.min(8,Math.max(1,state.qty+d)); updateBasket(false); }
+function updateBasket(fire){
+  const g=state.game, t=state.tier, base=+(t.p*state.qty).toFixed(2), fee=feesFor(base,state.qty), total=+(base+fee).toFixed(2);
+  state.basket={ id:g.id, comp:g.comp, opp:g.opp, cat:t.cat, price:t.p, qty:state.qty, base, fee, total };
+  state.deepest=Math.max(state.deepest,3);
+  if(fire) track("Seats Added to Basket",{ game_id:g.id, competition:g.comp, opponent:g.opp, ticket_category:t.cat, ticket_price:t.p, quantity:state.qty, basket_total:total, price_display:'all_in' });
   document.getElementById('selBox').innerHTML=`
-    <div class="rowline"><span>${cat}</span><span>€${price.toFixed(2)}</span></div>
-    <div class="rowline"><span>FC Bayern vs ${curGame.opp}</span><span></span></div>
-    <div class="rowline total"><span>Total</span><span>€${price.toFixed(2)}</span></div>
-    <div style="margin-top:14px"><button class="btn wide" onclick="proceed()">Proceed to checkout</button></div>`;
+    <div class="rowline"><span>${t.cat}</span><span>€${t.p.toFixed(2)} × ${state.qty}</span></div>
+    <div class="qty"><button id="qtyMinus" onclick="changeQty(-1)">−</button><b>${state.qty}</b><button id="qtyPlus" onclick="changeQty(1)">+</button><span class="meta">tickets</span></div>
+    <div class="rowline"><span>Booking &amp; service fees</span><span>€${fee.toFixed(2)}</span></div>
+    <div class="rowline total"><span>Total</span><span>€${total.toFixed(2)}</span></div>
+    <div style="margin-top:14px"><button class="btn wide" id="proceedBtn" onclick="proceed()">Proceed to checkout</button></div>`;
 }
 
-/* ---------------- proceed → wall (guests) or checkout (registered) ---------------- */
-function proceed(){
-  if(state.registered){ startCheckout(); return; }
-  // guest hits the login wall
-  const b=state.basket, fee=0.0, tax=0.0, total=b.price+fee+tax;
-  track("Fan Login Wall Hit",{ basket_total:b.price, booking_fee:fee, tax:tax, total_paid:total, fee_waived:false });
-  track("$exposure",{ flag_key:"fan-login-wall-hit-reduction", variant:VARIANT });
-  renderWall();
-}
+/* ===================== login wall ===================== */
+function proceed(){ if(state.registered){ state.checkoutType='account'; nav('/checkout'); } else { nav('/login-wall'); } }
 function renderWall(){
   const b=state.basket;
-  const guestBtn = `<button class="btn wide dark" onclick="continueGuest()">Continue as guest</button>`;
+  if(!state._wallFired){
+    state._wallFired=true;
+    track("Fan Login Wall Hit",{ game_id:b.id, basket_total:b.total, booking_fee:b.fee, total_paid:b.total, fee_waived:false, price_display:'all_in', fan_type:'guest' });
+    track("$exposure",{ flag_key:"fan-login-wall-hit-reduction", variant:VARIANT });
+  }
   const v=document.getElementById('view-flow');
   v.innerHTML=`
-    <button class="link" style="margin-bottom:14px" onclick="backToDetail()">← Back to seats</button>
-    <div class="sheet">
+    <button class="link" id="backToSeats" style="margin-bottom:14px" onclick="backToDetail()">← Back to seats</button>
+    <div class="sheet" data-zone="login-wall">
       <h2>Sign in to continue</h2>
-      <p class="sub">You're booking ${b.cat} for FC Bayern vs ${b.opp} (€${b.price.toFixed(2)}).</p>
-      <button class="btn wide" onclick="openLogin(true)">Log in or create a fan account</button>
-      ${ VARIANT==='treatment' ? '<div class="or">— or —</div>'+guestBtn : '' }
-      <div class="or" style="margin-top:18px">Have a promo code?</div>
-      <div class="field"><input id="promoInput" placeholder="Enter promo code"></div>
-      <button class="btn ghost sm" style="color:var(--ink);border-color:var(--line)" onclick="applyPromo()">Apply code</button>
+      <p class="sub">You're booking ${b.qty} × ${b.cat} for FC Bayern vs ${b.opp} (€${b.total.toFixed(2)}).</p>
+      <button class="btn wide" id="wallLoginBtn" onclick="openLogin('login_wall')">Log in or create a fan account</button>
+      ${VARIANT==='treatment' ? '<div class="or">— or —</div><button class="btn wide dark" id="guestCheckoutBtn" onclick="continueGuest()">Continue as guest</button>' : ''}
+      <div data-zone="promo-code">
+        <div class="or" style="margin-top:18px">Have a promo code?</div>
+        <div class="field"><input id="promoInput" placeholder="Enter promo code"></div>
+        <button class="btn ghost sm" id="applyPromoBtn" onclick="applyPromo()">Apply code</button>
+        <div id="promoMsg" class="meta" style="margin-top:8px"></div>
+      </div>
     </div>`;
   show('flow');
 }
-function backToDetail(){ if(state.basket){ track("Basket Abandoned",{ game_id:state.basket.id, basket_total:state.basket.price }); } openDetail(curGame); }
+function backToDetail(){ abandon('login_wall'); state._wallFired=false; nav('/game/'+state.game.id); }
 function applyPromo(){
-  const code=(document.getElementById('promoInput').value||'').trim();
-  const ok = code.toUpperCase()==='FCBB10';
-  track("Promo Code Entered",{ offer_attempted:true, offer_applied:ok, saving_amount: ok ? +(state.basket.price*0.10).toFixed(2) : 0 });
-  alert(ok ? "Code applied — 10% off!" : "Code not recognised. Try FCBB10.");
+  const code=(document.getElementById('promoInput').value||'').trim().toUpperCase(); if(!code) return;
+  const ok = code===VALID_PROMO;
+  track("Promo Code Entered",{ code_entered:code, code_valid:ok, offer_applied:ok, saving_amount: ok? +(state.basket.total*0.10).toFixed(2):0 });
+  if(ok) state.discount=0.10;
+  document.getElementById('promoMsg').textContent = ok ? "Code applied — 10% off at checkout." : "Code not recognised.";
 }
-function continueGuest(){ startCheckout(); }
+function continueGuest(){ state.checkoutType='guest'; track("Guest Checkout Selected",{ game_id:state.basket.id, basket_total:state.basket.total }); nav('/checkout'); }
 
-/* ---------------- checkout + confirm ---------------- */
-function startCheckout(){
-  const b=state.basket, total=b.price;
-  track("Checkout Started",{ basket_total:b.price, total_paid:total });
+/* ===================== checkout & payment ===================== */
+function renderCheckout(){
+  const b=state.basket, disc=Math.max(state.discount, state.membership!=='guest'?0.10:0), total=+(b.total*(1-disc)).toFixed(2);
+  state.totalPaid=total; state.deepest=Math.max(state.deepest,4); state.attempts=0;
+  track("Checkout Started",{ game_id:b.id, competition:b.comp, ticket_category:b.cat, quantity:b.qty, basket_total:b.total, booking_fee:b.fee,
+                             total_paid:total, checkout_type:state.checkoutType, fee_waived:false, member_discount_applied:disc>0 });
+  const methods = isIOS() ? ['card','apple_pay','paypal','klarna'] : (isAndroid() ? ['card','google_pay','paypal','klarna'] : ['card','paypal','klarna']);
+  const label = {card:'Card', apple_pay:'Apple Pay', google_pay:'Google Pay', paypal:'PayPal', klarna:'Klarna'};
+  state.pm = methods[0];
   const v=document.getElementById('view-flow');
   v.innerHTML=`
-    <button class="link" style="margin-bottom:14px" onclick="renderWall()">← Back</button>
-    <div class="sheet">
+    <button class="link" id="backFromCheckout" style="margin-bottom:14px" onclick="history.back()">← Back</button>
+    <div class="sheet" data-zone="checkout">
       <h2>Checkout</h2>
-      <p class="sub">FC Bayern vs ${b.opp} · ${b.cat}</p>
-      <div class="field"><label>Email for tickets</label><input id="coEmail" placeholder="you@email.com"></div>
-      <div class="field"><label>Card number</label><input placeholder="4242 4242 4242 4242"></div>
+      <p class="sub">FC Bayern vs ${b.opp} · ${b.qty} × ${b.cat} · ${state.checkoutType==='guest'?'Guest checkout':'Fan account'}</p>
+      <div class="field"><label>Email for tickets</label><input id="coEmail" type="email" placeholder="you@email.com"></div>
+      <label class="meta" style="display:block;margin-bottom:6px;font-weight:600;text-transform:uppercase;font-size:12px">Payment method</label>
+      <div class="pm" id="pmBox" data-zone="payment-methods">${methods.map(m=>`<button id="pm-${m}" class="${m===state.pm?'on':''}" onclick="setPm('${m}')">${label[m]}</button>`).join('')}</div>
+      <div class="field" id="cardField"><label>Card number</label><input id="coCard" placeholder="4242 4242 4242 4242"></div>
+      <div class="rowline"><span>Tickets</span><span>€${b.base.toFixed(2)}</span></div>
+      <div class="rowline"><span>Booking &amp; service fees</span><span>€${b.fee.toFixed(2)}</span></div>
+      ${disc>0?`<div class="rowline"><span>Member / promo discount</span><span>−€${(b.total*disc).toFixed(2)}</span></div>`:''}
       <div class="rowline total"><span>Total</span><span>€${total.toFixed(2)}</span></div>
-      <div style="margin-top:16px"><button class="btn wide" onclick="completePurchase()">Pay €${total.toFixed(2)}</button></div>
+      <div id="payErr"></div>
+      <div style="margin-top:16px"><button class="btn wide" id="payBtn" onclick="pay()">Pay now</button></div>
     </div>`;
   show('flow');
+}
+function setPm(m){ state.pm=m; document.querySelectorAll('#pmBox button').forEach(b=>b.classList.toggle('on', b.id==='pm-'+m)); document.getElementById('cardField').classList.toggle('hidden', m!=='card'); }
+function pay(){
+  const btn=document.getElementById('payBtn'); if(btn.disabled) return;
+  state.attempts++;
+  track("Payment Submitted",{ payment_method:state.pm, attempt:state.attempts, total_paid:state.totalPaid, checkout_type:state.checkoutType });
+  // Simulated defect shipped with checkout v2.3: 3-D Secure challenge times out on iOS Safari (card + Apple Pay).
+  const bug = isIOS() && (state.pm==='card' || state.pm==='apple_pay') && Math.random() < 0.58;
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Verifying with your bank…';
+  setTimeout(()=>{
+    btn.disabled=false; btn.textContent='Pay now';
+    if(bug){
+      track("Payment Failed",{ payment_method:state.pm, error_code:"3DS_TIMEOUT", attempt:state.attempts, error_message:"Bank verification timed out", total_paid:state.totalPaid });
+      document.getElementById('payErr').innerHTML='<div class="err" id="payErrorMsg">Bank verification timed out. Your card was not charged — please try again.</div>';
+    } else { completePurchase(); }
+  }, bug ? 6000 : 1500);
 }
 function completePurchase(){
-  state.abandonGuard=true;
-  const b=state.basket, total=b.price;
-  const ref="FCBB_"+Date.now();
+  state.abandonGuard=true; state.converted=true; state.deepest=5;
+  const b=state.basket, total=state.totalPaid, ref="FCBB-"+Math.random().toString(16).slice(2,10).toUpperCase();
   const first = safeStore.get('fcbb_bought')!=='1'; safeStore.set('fcbb_bought','1');
-  track("Tickets Purchased",{ booking_reference:ref, total_paid:total, is_first_purchase:first });
-  const v=document.getElementById('view-flow');
-  v.innerHTML=`<div class="sheet confirm">
-      <div class="tick">✓</div>
-      <h2>You're going!</h2>
-      <p class="sub">FC Bayern vs ${b.opp} · ${b.cat}</p>
-      <p style="margin:10px 0">Booking reference <span class="ref">${ref}</span></p>
-      <button class="btn" onclick="resetFlow()">Back to fixtures</button>
+  track("Tickets Purchased",{ booking_reference:ref, game_id:b.id, competition:b.comp, opponent:b.opp, ticket_category:b.cat, quantity:b.qty,
+        ticket_price:b.price, booking_fee:b.fee, total_paid:total, payment_method:state.pm, checkout_type:state.checkoutType,
+        is_first_purchase:first, days_until_game:daysUntil((FIXTURES.find(f=>f.id===b.id)||{}).date||new Date().toISOString()),
+        promo_applied:state.discount>0, currency:"EUR" },
+        { revenue:total, price:+(total/b.qty).toFixed(2), quantity:b.qty, productId:b.id, revenueType:"ticket" });
+  state.lastBooking={ ref, b };
+  nav('/confirmation');
+}
+function renderConfirmation(){
+  const {ref,b}=state.lastBooking;
+  document.getElementById('view-flow').innerHTML=`<div class="sheet confirm" data-zone="confirmation">
+      <div class="tick">✓</div><h2>You're going!</h2>
+      <p class="sub">FC Bayern vs ${b.opp} · ${b.qty} × ${b.cat}</p>
+      <p style="margin:10px 0">Booking reference <span class="ref" id="bookingRef">${ref}</span></p>
+      <button class="btn dark" id="walletBtn" onclick="addWallet('${ref}')">Add to Wallet</button>
+      <div style="margin-top:10px"><button class="btn ghost" id="backToFixtures" onclick="resetFlow()">Back to fixtures</button></div>
     </div>`;
   show('flow');
 }
-function resetFlow(){ state.basket=null; state.abandonGuard=false; show('fixtures'); }
+function addWallet(ref){ track("Mobile Ticket Added to Wallet",{ wallet: isIOS()?'apple_wallet':'google_wallet', booking_reference:ref }); toast("Ticket added to your wallet"); }
+function resetFlow(){ state.basket=null; state.abandonGuard=false; state._wallFired=false; state.discount=0; nav('/fixtures'); }
 
-/* ---------------- identity / login ---------------- */
-function openLogin(fromWall){ document.getElementById('loginModal').classList.remove('hidden'); previewId(); document.getElementById('loginModal').dataset.fromwall=fromWall?'1':''; }
+/* ===================== identity / login ===================== */
+function openLogin(source){ const m=document.getElementById('loginModal'); m.classList.remove('hidden'); m.dataset.source=source||'header'; previewId(); }
 function closeLogin(){ document.getElementById('loginModal').classList.add('hidden'); }
 function setFan(btn,tier){ document.querySelectorAll('#fanSeg button').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); state.fanTier=tier; }
 function genId(name,num){ const c=(name||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'')||'user'; const d=new Date().toISOString().split('T')[0].replace(/-/g,''); return `${c}_${num||1}_${d}`; }
-function previewId(){ const n=document.getElementById('liName').value, num=document.getElementById('liNum').value||1; document.getElementById('idPreview').textContent=genId(n,num); }
+function previewId(){ document.getElementById('idPreview').textContent=genId(document.getElementById('liName').value, document.getElementById('liNum').value||1); }
 function doLogin(){
-  const n=document.getElementById('liName').value||'Fan', num=document.getElementById('liNum').value||1;
-  const uid=genId(n,num);
+  const n=document.getElementById('liName').value||'Fan', num=document.getElementById('liNum').value||1, uid=genId(n,num);
+  const source=document.getElementById('loginModal').dataset.source||'header';
+  const isNew = state.fanTier==='registered';
   try{
     amplitude.setUserId(uid);
+    state.registered=true; state.membership = isNew ? 'guest' : state.fanTier;
     const id=new amplitude.Identify();
-    id.set("Fan Account Registered", true);
-    id.set("Membership Level", state.fanTier);
-    id.set("account_age_days", state.fanTier==='season_member'?420:160);
-    id.set("device_type", deviceType());
-    id.set("utm_medium", utmMedium());
+    id.set("Fan Account Registered", true); id.set("Membership Level", state.membership);
+    id.set("account_age_days", isNew?0:(state.fanTier==='season_member'?420:160));
+    id.set("device_type", deviceType()); id.set("utm_medium", utmMedium());
     amplitude.identify(id);
-  }catch(e){ console.warn(e); }
-  state.registered=true;
+  }catch(e){}
+  track(isNew ? "Fan Account Created" : "Fan Signed In", { method:"email", source });
   const chip=document.getElementById('idchip'); chip.classList.add('on');
-  document.getElementById('idlabel').textContent=uid;
-  document.getElementById('loginBtn').textContent='Account';
-  const fromWall=document.getElementById('loginModal').dataset.fromwall==='1';
+  document.getElementById('idlabel').textContent=uid; document.getElementById('loginBtn').textContent='Account';
   closeLogin();
-  if(fromWall && state.basket){ startCheckout(); }
+  if(state._afterLogin==='membership'){ state._afterLogin=null; openMembership('nav'); return; }
+  if(source==='login_wall' && state.basket){ state.checkoutType='account'; nav('/checkout'); }
 }
 </script>
 </body>
