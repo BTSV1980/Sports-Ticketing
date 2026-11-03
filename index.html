@@ -291,7 +291,14 @@ function nav(path, replace){
   if(replace) history.replaceState({path}, '', url); else history.pushState({path}, '', url);
   render(path);
 }
-window.addEventListener('popstate', ()=>{ const p=(location.hash||'#/fixtures').slice(1); leaveCheck(p); render(p); });
+// "#join" = deep link used by the G&S "Members save 10%" guide CTA: open the membership modal, keep the current screen.
+function handleJoinLink(){
+  if(location.hash!=='#join') return false;
+  history.replaceState({path:state.cur||'/fixtures'}, '', location.pathname+location.search+'#'+(state.cur||'/fixtures'));
+  openMembership('guide'); return true;
+}
+window.addEventListener('hashchange', handleJoinLink);
+window.addEventListener('popstate', ()=>{ if(location.hash==='#join'){ handleJoinLink(); return; } const p=(location.hash||'#/fixtures').slice(1); leaveCheck(p); render(p); });
 function show(id){ ["fixtures","detail","flow"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden", v!==id)); window.scrollTo(0,0); }
 function render(path){
   state.cur = path;
